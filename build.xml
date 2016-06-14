@@ -59,7 +59,7 @@
   
   
   
-  <property name="compiler.args.workflow-test" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  <property name="compiler.args.workflow-test" value="-encoding UTF-8 ${compiler.args}"/>
   
   <property name="workflow-test.output.dir" value="${module.workflow-test.basedir}/out/production/workflow-test"/>
   <property name="workflow-test.testoutput.dir" value="${module.workflow-test.basedir}/out/test/workflow-test"/>
