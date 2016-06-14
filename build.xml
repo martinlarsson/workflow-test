@@ -115,9 +115,9 @@
   </path>
   
   
-  <target name="compile.module.workflow-test" depends="compile.module.workflow-test.production,compile.module.workflow-test.tests" description="Compile module workflow-test"/>
+  <target name="compile.module" depends="production,test" description="Compile module workflow-test"/>
   
-  <target name="compile.module.workflow-test.production" description="Compile module workflow-test; production classes">
+  <target name="production" description="Compile module workflow-test; production classes">
     <mkdir dir="${workflow-test.output.dir}"/>
     <javac destdir="${workflow-test.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.workflow-test}"/>
@@ -135,7 +135,7 @@
     </copy>
   </target>
   
-  <target name="compile.module.workflow-test.tests" depends="compile.module.workflow-test.production" description="compile module workflow-test; test classes" unless="skip.tests">
+  <target name="test" depends="production" description="compile module workflow-test; test classes" unless="skip.tests">
     <mkdir dir="${workflow-test.testoutput.dir}"/>
     <javac destdir="${workflow-test.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.workflow-test}"/>
@@ -153,7 +153,7 @@
     </copy>
   </target>
   
-  <target name="clean.module.workflow-test" description="cleanup module">
+  <target name="clean.module" description="cleanup module">
     <delete dir="${workflow-test.output.dir}"/>
     <delete dir="${workflow-test.testoutput.dir}"/>
   </target>
@@ -162,9 +162,9 @@
     <!-- Perform any build initialization in this target -->
   </target>
   
-  <target name="clean" depends="clean.module.workflow-test" description="cleanup all"/>
+  <target name="clean" depends="clean.module" description="cleanup all"/>
   
-  <target name="build.modules" depends="init, clean, compile.module.workflow-test" description="build all modules"/>
+  <target name="build.modules" depends="init, clean, compile.module" description="build all modules"/>
   
   <target name="all" depends="build.modules" description="build all"/>
 </project>
