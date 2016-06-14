@@ -1,6 +1,6 @@
-package se.mlarsson;
-
 import org.junit.*;
+import se.mlarsson.SquareDigits;
+
 import static org.junit.Assert.assertEquals;
 
 public class SquareDigitsTest {
