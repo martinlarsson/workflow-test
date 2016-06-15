@@ -61,8 +61,8 @@
             </classpath>
             <batchtest>
                 <formatter type="plain" usefile="false"/>
-                <fileset dir="${out.dir}">
-                    <include name="**/*Test.java"/>
+                <fileset dir="${test.dir}">
+                    <include name="**/*.java"/>
                 </fileset>
             </batchtest>
         </junit>
