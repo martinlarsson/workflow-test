@@ -59,9 +59,9 @@
             <classpath>
                 <path refid="classpath"/>
             </classpath>
-            <batchtest fork="yes" todir="${report.dir}">
+            <batchtest fork="yes" haltonfailure="yes">
                 <formatter type="plain" usefile="false"/>
-                <fileset dir="out">
+                <fileset dir="${out.dir}">
                     <include name="**/*Test.java"/>
                 </fileset>
             </batchtest>
