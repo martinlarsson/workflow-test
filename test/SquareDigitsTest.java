@@ -2,6 +2,7 @@ import org.junit.*;
 import se.mlarsson.SquareDigits;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class SquareDigitsTest {
     private SquareDigits sd;
@@ -12,8 +13,13 @@ public class SquareDigitsTest {
     }
 
     @Test
+    public void testShouldFail() throws Exception {
+        fail();
+    }
+
+    @Test
     public void testsSquareZero() throws Exception {
-        int expected = -1;
+        int expected = 0;
         int actual = sd.square(0);
         assertEquals("Testing digit square of 0", expected, actual);
     }

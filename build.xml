@@ -6,15 +6,11 @@
     <property name="jar.dir" value="${out.dir}/jar"/>
     <property name="lib.dir" value="lib"/>
     <property name="test.dir" value="test"/>
-    <property name="test.out.dir" value="${out.dir}/test"/>
     <property name="report.dir" value="${out.dir}/testreport"/>
     <property name="main.class" value="se.mlarsson.SquareDigits"/>
     <property name="debug.level" value="source,lines,vars"/>
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
-    </path>
-    <path id="test.classpath">
-        <fileset dir="${test.dir}" includes="**/*.class"/>
     </path>
     <path id="application" location="${jar.dir}/${ant.project.name}.jar"/>
 
@@ -35,7 +31,6 @@
             <src path="test"/>
             <classpath>
                 <path refid="classpath"/>
-                <path refid="test.classpath"/>
             </classpath>
             <compilerarg value="-Xlint:all"/>
         </javac>
@@ -50,7 +45,7 @@
         </jar>
     </target>
 
-    <target name="run" depends="jar" description="Create jar and run.">
+    <target name="run" depends="jar" description="Run jar-file.">
         <java fork="true" classname="${main.class}">
             <classpath>
                 <path refid="classpath"/>
@@ -60,24 +55,25 @@
     </target>
 
     <target name="test" depends="compile" description="Run all tests.">
-        <mkdir dir="${report.dir}"/>
         <junit printsummary="withOutAndErr">
             <classpath>
                 <path refid="classpath"/>
-                <path refid="test.classpath"/>
             </classpath>
-            <formatter type="brief" usefile="false" />
-            <batchtest fork="yes" todir="${report.dir}" failureProperty="test.failed">
-                <fileset dir="${test.dir}" includes="**/*.class"/>
+            <batchtest fork="yes" todir="${report.dir}">
+                <formatter type="plain" usefile="false"/>
+                <fileset dir="out">
+                    <include name="**/*Test.java"/>
+                </fileset>
             </batchtest>
         </junit>
-        <fail message="Test failure detected, check results." if="test.failed" />
     </target>
 
-    <target name="testreport" depends="test">
+    <target name="junitreport">
         <junitreport todir="${report.dir}">
-            <fileset dir="${report.dir}" includes="TEST-*.xml"/>
-            <report todir="${report.dir}"/>
+            <fileset dir="${report.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${report.dir}"/>
         </junitreport>
     </target>
 
