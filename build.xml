@@ -55,11 +55,11 @@
     </target>
 
     <target name="test" depends="compile" description="Run all tests.">
-        <junit printsummary="withOutAndErr">
+        <junit printsummary="withOutAndErr" showoutput="true" fork="yes" haltonfailure="yes">
             <classpath>
                 <path refid="classpath"/>
             </classpath>
-            <batchtest fork="yes" haltonfailure="yes">
+            <batchtest>
                 <formatter type="plain" usefile="false"/>
                 <fileset dir="${out.dir}">
                     <include name="**/*Test.java"/>

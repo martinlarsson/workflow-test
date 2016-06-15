@@ -6,4 +6,3 @@ jdk:
 
 script:
   - ant test
-  - ant testreport
