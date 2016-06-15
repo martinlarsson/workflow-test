@@ -60,6 +60,7 @@
     </target>
 
     <target name="test" depends="compile" description="Run all tests.">
+        <mkdir dir="${report.dir}"/>
         <junit printsummary="withOutAndErr">
             <classpath>
                 <path refid="classpath"/>
@@ -73,7 +74,7 @@
         <fail message="Test failure detected, check results." if="test.failed" />
     </target>
 
-    <target name="testreport">
+    <target name="testreport" depends="test">
         <junitreport todir="${report.dir}">
             <fileset dir="${report.dir}" includes="TEST-*.xml"/>
             <report todir="${report.dir}"/>
