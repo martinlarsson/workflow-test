@@ -17,17 +17,16 @@
     </path>
 
     <!-- Targets -->
-    <target name="init">
+    <target name="init" description="Create directories">
         <mkdir dir="${out.dir}"/>
     </target>
 
-    <target name="clean">
+    <target name="clean" description="Clean up">
         <delete dir="${out.dir}"/>
     </target>
 
-    <target name="build" depends="init">
-        <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debug.level}" destdir="${out.dir}">
+    <target name="build" depends="init" description="Compile">
+        <javac debug="true" debuglevel="${debug.level}" destdir="${out.dir}" includeantruntime="false">
             <src path="${src.dir}"/>
             <src path="${test.dir}"/>
             <classpath>
@@ -37,8 +36,9 @@
         </javac>
     </target>
 
-    <target name="junit" depends="build">
+    <target name="junit" depends="build" description="Run tests">
         <junit printsummary="withOutAndErr" failureproperty="test.failed">
+            <formatter type="xml"/>
             <classpath>
                 <path refid="classpath"/>
             </classpath>
@@ -49,7 +49,7 @@
                 </fileset>
             </batchtest>
         </junit>
-        <fail message="Test failure detected, check results." if="test.failed" />
+        <fail message="Test failure detected, check results." if="test.failed"/>
     </target>
 
 </project>
