@@ -1,4 +1,4 @@
 /**
- * Default package
+ * Default package.
  */
 package se.mlarsson;

@@ -4,23 +4,32 @@ package se.mlarsson;
  * Class for squaring individual digits in a number.
  */
 public class SquareDigits {
+    /**
+     * Calculations made in base 10.
+     */
+    private final int base = 10;
 
     /**
      * Returns a number with individual squares of each digit in input number.
-     * @param value input value
+     * @param digitsToBeSquared input value
      * @return squared digits
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException value must be positive
      */
-    public final int square(int value) throws IllegalArgumentException {
-        if (value < 0) throw new IllegalArgumentException("" +
-                "Value must be positive.");
-        int squared = 0;
-        int length = 0;
-        while (value > 0) {
-            squared += (Math.pow(value%10,2) * Math.pow(10,length));
-            value = value/10;
-            length = (int)Math.log10(squared)+1;
+    public final int square(final int digitsToBeSquared)
+            throws IllegalArgumentException {
+        if (digitsToBeSquared < 0) {
+            throw new IllegalArgumentException(""
+                    + "Value must be positive.");
         }
-        return squared;
+        int remainingDigits = digitsToBeSquared;
+        int result = 0;
+        int length = 0;
+        while (remainingDigits > 0) {
+            result += (Math.pow(remainingDigits % base, 2)
+                    * Math.pow(base, length));
+            remainingDigits = remainingDigits / base;
+            length = (int) Math.log10(result) + 1;
+        }
+        return result;
     }
 }
