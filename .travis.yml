@@ -6,3 +6,4 @@ jdk:
 
 script:
   - ant junit
+  - ant checkstyle

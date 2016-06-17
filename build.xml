@@ -51,4 +51,9 @@
         <fail message="Test failure detected, check results." if="test.failed"/>
     </target>
 
+    <checkstyle config="docs/sun_checks.xml">
+        <fileset dir="${src.dir}" includes="**/*.java"/>
+        <formatter type="plain"/>
+    </checkstyle>
+
 </project>
