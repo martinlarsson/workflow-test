@@ -15,6 +15,11 @@
             <include name="hamcrest-*.jar"/>
         </fileset>
     </path>
+    <path id="checkstyle.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="checkstyle-*.jar"/>
+        </fileset>
+    </path>
 
     <!-- Targets -->
     <target name="init" description="Create directories">
@@ -36,7 +41,7 @@
         </javac>
     </target>
 
-    <target name="junit" depends="build" description="Run tests">
+    <target name="junit" depends="build" description="Run JUnit tests">
         <junit printsummary="withOutAndErr" failureproperty="test.failed">
             <classpath>
                 <path refid="classpath"/>
@@ -51,9 +56,13 @@
         <fail message="Test failure detected, check results." if="test.failed"/>
     </target>
 
-    <checkstyle config="docs/sun_checks.xml">
-        <fileset dir="${src.dir}" includes="**/*.java"/>
-        <formatter type="plain"/>
-    </checkstyle>
-
+    <target name="checkstyle" description="Check Sun Java code style">
+        <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties">
+            <classpath refid="checkstyle.classpath"/>
+        </taskdef>
+        <checkstyle config="sun_checks.xml">
+            <fileset dir="${src.dir}" includes="**/*.java"/>
+            <formatter type="plain"/>
+        </checkstyle>
+    </target>
 </project>

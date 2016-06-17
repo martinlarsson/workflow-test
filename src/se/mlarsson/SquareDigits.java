@@ -11,7 +11,7 @@ public class SquareDigits {
      * @return squared digits
      * @throws IllegalArgumentException
      */
-    public int square(int value) throws IllegalArgumentException {
+    public final int square(int value) throws IllegalArgumentException {
         if (value < 0) throw new IllegalArgumentException("" +
                 "Value must be positive.");
         int squared = 0;
