@@ -38,7 +38,7 @@
     </target>
 
     <target name="junit" depends="build">
-        <junit printsummary="withOutAndErr">
+        <junit printsummary="withOutAndErr" failureproperty="test.failed">
             <classpath>
                 <path refid="classpath"/>
             </classpath>
