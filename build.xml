@@ -38,11 +38,10 @@
 
     <target name="junit" depends="build" description="Run tests">
         <junit printsummary="withOutAndErr" failureproperty="test.failed">
-            <formatter type="xml"/>
             <classpath>
                 <path refid="classpath"/>
             </classpath>
-            <batchtest fork="no" todir="${test.out.dir}">
+            <batchtest fork="yes" todir="${test.out.dir}">
                 <formatter type="plain" usefile="false"/>
                 <fileset dir="test">
                     <include name="**/*.java"/>
