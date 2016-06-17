@@ -42,7 +42,7 @@
             <classpath>
                 <path refid="classpath"/>
             </classpath>
-            <batchtest fork="yes" todir="${test.out.dir}">
+            <batchtest fork="no" todir="${test.out.dir}">
                 <formatter type="plain" usefile="false"/>
                 <fileset dir="test">
                     <include name="**/*.java"/>
