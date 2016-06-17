@@ -49,6 +49,7 @@
                 </fileset>
             </batchtest>
         </junit>
+        <fail message="Test failure detected, check results." if="test.failed" />
     </target>
 
 </project>
