@@ -19,7 +19,8 @@ A short description of the included files.
 * `build.xml` - Ant-file with specifics for building, executing tests and running style check.
 * `sun_checks.xml` - Sun Java code style rules fur checkstyle usage.
 
-
+## Travis CI
+This repository is using Travis CI to automatically run JUnit-tests and checkstyle. It can be monitored at [travis-ci.org/martinlarsson/workflow-test](https://travis-ci.org/martinlarsson/workflow-test).
 
 
 
