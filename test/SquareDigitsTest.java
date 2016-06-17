@@ -8,8 +8,11 @@ public class SquareDigitsTest {
     private SquareDigits sd;
 
     @Before
-    public void setUp() {
-        sd = new SquareDigits();
+    public void setUp() { sd = new SquareDigits(); }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void testIllegalArgument() throws Exception {
+        sd.square(-1);
     }
 
     @Test

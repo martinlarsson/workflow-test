@@ -1,34 +1,35 @@
-<project name="workflow-test" basedir="." default="main">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="workflow-test">
 
-    <!-- Properties & paths -->
+    <!-- Properties and paths -->
+    <property name="test.dir" value="test"/>
     <property name="src.dir" value="src"/>
     <property name="out.dir" value="out"/>
-    <property name="jar.dir" value="${out.dir}/jar"/>
+    <property name="test.out.dir" value="${out.dir}/test"/>
     <property name="lib.dir" value="lib"/>
-    <property name="test.dir" value="test"/>
-    <property name="report.dir" value="${out.dir}/testreport"/>
-    <property name="main.class" value="se.mlarsson.SquareDigits"/>
     <property name="debug.level" value="source,lines,vars"/>
     <path id="classpath">
-        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        <pathelement location="${out.dir}"/>
+        <fileset dir="${lib.dir}">
+            <include name="junit-*.jar"/>
+            <include name="hamcrest-*.jar"/>
+        </fileset>
     </path>
-    <path id="application" location="${jar.dir}/${ant.project.name}.jar"/>
-
 
     <!-- Targets -->
-    <target name="clean" description="Clean all files and folders in output.">
-        <delete includeEmptyDirs="true">
-            <fileset dir="${out.dir}">
-                <include name="*/**" />
-            </fileset>
-        </delete>
+    <target name="init">
+        <mkdir dir="${out.dir}"/>
     </target>
 
-    <target name="compile" description="Compile all src-files.">
-        <mkdir dir="${out.dir}"/>
+    <target name="clean">
+        <delete dir="${out.dir}"/>
+    </target>
+
+    <target name="build" depends="init">
+        <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debug.level}" destdir="${out.dir}">
-            <src path="src"/>
-            <src path="test"/>
+            <src path="${src.dir}"/>
+            <src path="${test.dir}"/>
             <classpath>
                 <path refid="classpath"/>
             </classpath>
@@ -36,49 +37,18 @@
         </javac>
     </target>
 
-    <target name="jar" depends="compile" description="Create jar-file.">
-        <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${out.dir}">
-            <manifest>
-                <attribute name="Main-Class" value="${main.class}"/>
-            </manifest>
-        </jar>
-    </target>
-
-    <target name="run" depends="jar" description="Run jar-file.">
-        <java fork="true" classname="${main.class}">
-            <classpath>
-                <path refid="classpath"/>
-                <path refid="application"/>
-            </classpath>
-        </java>
-    </target>
-
-    <target name="test" depends="compile" description="Run all tests.">
-        <junit printsummary="withOutAndErr" showoutput="true" fork="yes" haltonfailure="yes">
+    <target name="junit" depends="build">
+        <junit printsummary="withOutAndErr">
             <classpath>
                 <path refid="classpath"/>
             </classpath>
-            <batchtest>
+            <batchtest fork="yes" todir="${test.out.dir}">
                 <formatter type="plain" usefile="false"/>
-                <fileset dir="${test.dir}">
+                <fileset dir="test">
                     <include name="**/*.java"/>
                 </fileset>
             </batchtest>
         </junit>
     </target>
-
-    <target name="junitreport">
-        <junitreport todir="${report.dir}">
-            <fileset dir="${report.dir}">
-                <include name="TEST-*.xml"/>
-            </fileset>
-            <report format="frames" todir="${report.dir}"/>
-        </junitreport>
-    </target>
-
-    <target name="clean-build" depends="clean,jar" description="Clean and build."/>
-
-    <target name="main" depends="clean,run" description="Clean and run."/>
 
 </project>
