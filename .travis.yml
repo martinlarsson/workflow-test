@@ -7,3 +7,6 @@ jdk:
 script:
   - ant junit
   - ant checkstyle
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
