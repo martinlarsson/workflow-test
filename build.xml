@@ -58,7 +58,6 @@
                 <classpath>
                     <path refid="classpath"/>
                 </classpath>
-                <formatter type="xml"/>
                 <batchtest todir="${test.out.dir}">
                     <formatter type="plain" usefile="false"/>
                     <fileset dir="test">
