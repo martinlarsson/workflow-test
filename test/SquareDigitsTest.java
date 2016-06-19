@@ -2,12 +2,18 @@ import org.junit.*;
 import se.mlarsson.SquareDigits;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class SquareDigitsTest {
     private SquareDigits sd;
 
     @Before
     public void setUp() { sd = new SquareDigits(); }
+
+    @Test
+    public void testConstructor() throws Exception {
+        assertNotNull("Testing SquareDigits constructor", sd);
+    }
 
     @Test (expected = IllegalArgumentException.class)
     public void testIllegalArgument() throws Exception {

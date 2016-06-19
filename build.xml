@@ -51,10 +51,10 @@
         </javac>
     </target>
 
-    <target name="junit" depends="build" description="Run JUnit tests">
+    <target name="junit" depends="build" description="Run JUnit tests with coverage">
         <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpath="${lib.dir}/jacocoant.jar"/>
         <jacoco:coverage destfile="${out.dir}/jacoco.exec" xmlns:jacoco="antlib:org.jacoco.ant">
-            <junit fork="true" forkmode="once" printsummary="withOutAndErr" haltonfailure="no" failureproperty="test.failed">
+            <junit fork="true" printsummary="withOutAndErr" haltonfailure="no" failureproperty="test.failed">
                 <classpath>
                     <path refid="classpath"/>
                 </classpath>
@@ -67,6 +67,7 @@
                 </batchtest>
             </junit>
         </jacoco:coverage>
+        <fail message="Test failure detected, check results." if="test.failed"/>
     </target>
 
     <target name="checkstyle" description="Check Sun Java code style">

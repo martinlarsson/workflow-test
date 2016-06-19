@@ -9,6 +9,7 @@ jdk:
 script:
   - ant junit
   - ant checkstyle
+  - ant jacoco
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
