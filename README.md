@@ -21,8 +21,23 @@ A short description of the included files.
 * `build.xml` - Ant-file with specifics for building, executing tests and running style check.
 * `sun_checks.xml` - Sun Java code style rules fur checkstyle usage.
 
+## Ant
+Ant is used to automate builds. The targets included in `build.xml` are:
+
+* `build` - Compiles source- and testfiles.
+* `checkstyle` - Runs checkstyle according to `sun_checks.xml` on all `.java`-files in the `src` dir.
+* `clean` - Deletes the `out` and `report` dir that `init` generates.
+* `init` - Creates the `out` and `report` dir.
+* `jacoco` - Generates coverage data in _XML_-format.
+* `junit` - Runs _JUnit_ tests and checks coverage.
+
+The targets can be run with the command `ant <target-name>`.
+
 ## Travis CI
 This repository is using Travis CI to automatically run JUnit-tests and checkstyle. It can be monitored at [travis-ci.org/martinlarsson/workflow-test](https://travis-ci.org/martinlarsson/workflow-test).
+
+## Codecov
+Codecov is used to display coverage data from [Java Code Coverage (JaCoCo)](http://www.eclemma.org/jacoco/). It can be monitored at [codecov.io/gh/martinlarsson/workflow-test](https://codecov.io/gh/martinlarsson/workflow-test).
 
 
 
