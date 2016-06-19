@@ -12,8 +12,9 @@ A short description of the contents of the included folders.
 ## Files
 A short description of the included files.
 
-* `.gitignore` - Specifikation of which files should not be tracked by git.
-* `.travis.yml` - Specifikation of what should be run on Travis CI and in what order.
+* `.gitignore` - Specification of which files should not be tracked by git.
+* `.travis.yml` - Specification of what should be run on Travis CI and in what order.
+* `codecov.yml` - Specification for codecov.
 * `LICENSE` - License of the source code.
 * `README.md` - This file.
 * `build.xml` - Ant-file with specifics for building, executing tests and running style check.
