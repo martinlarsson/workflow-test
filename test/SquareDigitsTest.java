@@ -1,8 +1,7 @@
 import org.junit.*;
 import se.mlarsson.SquareDigits;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class SquareDigitsTest {
     private SquareDigits sd;
@@ -15,9 +14,15 @@ public class SquareDigitsTest {
         assertNotNull("Testing SquareDigits constructor", sd);
     }
 
-    @Test (expected = IllegalArgumentException.class)
+    @Test
     public void testIllegalArgument() throws Exception {
-        sd.square(-1);
+        try {
+            sd.square(-1);
+            fail("Did not catch an IllegalArgumentException.");
+        } catch (IllegalArgumentException e) {
+            assertTrue("Testing for IllegalArgumentException", e.getMessage()
+                    .equals("Value must be positive."));
+        }
     }
 
     @Test
