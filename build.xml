@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="build" name="workflow-test">
+<project basedir="." default="build" name="workflow-test" xmlns:jacoco="antlib:org.jacoco.ant">
 
     <!-- Properties and paths -->
     <property name="test.dir" value="test"/>
@@ -7,6 +7,7 @@
     <property name="out.dir" value="out"/>
     <property name="test.out.dir" value="${out.dir}/test"/>
     <property name="lib.dir" value="lib"/>
+    <property name="report.dir" value="report"/>
     <property name="debug.level" value="source,lines,vars"/>
     <path id="classpath">
         <pathelement location="${out.dir}"/>
@@ -21,6 +22,14 @@
         </fileset>
     </path>
 
+    <!-- Taskdefs -->
+    <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+        <classpath path="${lib.dir}/jacocoant.jar"/>
+    </taskdef>
+    <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties">
+        <classpath refid="checkstyle.classpath"/>
+    </taskdef>
+
     <!-- Targets -->
     <target name="init" description="Create directories">
         <mkdir dir="${out.dir}"/>
@@ -28,6 +37,7 @@
 
     <target name="clean" description="Clean up">
         <delete dir="${out.dir}"/>
+        <delete dir="${report.dir}"/>
     </target>
 
     <target name="build" depends="init" description="Compile">
@@ -42,27 +52,47 @@
     </target>
 
     <target name="junit" depends="build" description="Run JUnit tests">
-        <junit printsummary="withOutAndErr" failureproperty="test.failed">
-            <classpath>
-                <path refid="classpath"/>
-            </classpath>
-            <batchtest fork="yes" todir="${test.out.dir}">
-                <formatter type="plain" usefile="false"/>
-                <fileset dir="test">
-                    <include name="**/*.java"/>
-                </fileset>
-            </batchtest>
-        </junit>
-        <fail message="Test failure detected, check results." if="test.failed"/>
+        <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpath="${lib.dir}/jacocoant.jar"/>
+        <jacoco:coverage destfile="${out.dir}/jacoco.exec" xmlns:jacoco="antlib:org.jacoco.ant">
+            <junit fork="true" forkmode="once" printsummary="withOutAndErr" haltonfailure="no" failureproperty="test.failed">
+                <classpath>
+                    <path refid="classpath"/>
+                </classpath>
+                <formatter type="xml"/>
+                <batchtest todir="${test.out.dir}">
+                    <formatter type="plain" usefile="false"/>
+                    <fileset dir="test">
+                        <include name="**/*.java"/>
+                    </fileset>
+                </batchtest>
+            </junit>
+        </jacoco:coverage>
     </target>
 
     <target name="checkstyle" description="Check Sun Java code style">
-        <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties">
-            <classpath refid="checkstyle.classpath"/>
-        </taskdef>
         <checkstyle config="sun_checks.xml">
             <fileset dir="${src.dir}" includes="**/*.java"/>
             <formatter type="plain"/>
         </checkstyle>
     </target>
+
+    <target name="jacoco" depends="junit" description="Generate Java code coverage report in XML-format">
+        <mkdir dir="${report.dir}"/>
+        <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpath="${lib.dir}/jacocoant.jar"/>
+        <jacoco:report>
+            <executiondata>
+                <file file="${out.dir}/jacoco.exec"/>
+            </executiondata>
+            <structure name="${ant.project.name}">
+                <classfiles>
+                    <fileset dir="${out.dir}"/>
+                </classfiles>
+                <sourcefiles encoding="UTF-8">
+                    <fileset dir="${src.dir}"/>
+                </sourcefiles>
+            </structure>
+            <xml destfile="${report.dir}/report.xml"/>
+        </jacoco:report>
+    </target>
+
 </project>
