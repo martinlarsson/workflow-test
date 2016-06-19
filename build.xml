@@ -7,16 +7,27 @@
     <property name="out.dir" value="out"/>
     <property name="test.out.dir" value="${out.dir}/test"/>
     <property name="lib.dir" value="lib"/>
-    <property name="report.dir" value="report"/>
+    <property name="report.dir" value="${out.dir}/report"/>
     <property name="debug.level" value="source,lines,vars"/>
     <path id="classpath">
         <pathelement location="${out.dir}"/>
+    </path>
+    <path id="test.cp">
+        <pathelement location="${out.dir}"/>
+        <pathelement location="${test.out.dir}"/>
         <fileset dir="${lib.dir}">
             <include name="junit-*.jar"/>
             <include name="hamcrest-*.jar"/>
         </fileset>
     </path>
-    <path id="checkstyle.classpath">
+    <path id="jacoco.cp">
+        <pathelement location="${out.dir}"/>
+        <fileset dir="${lib.dir}">
+            <include name="jacocoant.jar"/>
+        </fileset>
+    </path>
+    <path id="checkstyle.cp">
+        <pathelement location="${out.dir}"/>
         <fileset dir="${lib.dir}">
             <include name="checkstyle-*.jar"/>
         </fileset>
@@ -24,44 +35,53 @@
 
     <!-- Taskdefs -->
     <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
-        <classpath path="${lib.dir}/jacocoant.jar"/>
+        <classpath refid="jacoco.cp"/>
     </taskdef>
     <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties">
-        <classpath refid="checkstyle.classpath"/>
+        <classpath refid="checkstyle.cp"/>
     </taskdef>
 
     <!-- Targets -->
     <target name="init" description="Create directories">
+        <echo message="Creating dirs."/>
         <mkdir dir="${out.dir}"/>
+        <mkdir dir="${test.out.dir}"/>
         <mkdir dir="${report.dir}"/>
     </target>
 
     <target name="clean" description="Clean up">
+        <echo message="Deleting dirs."/>
         <delete dir="${out.dir}"/>
         <delete dir="${report.dir}"/>
     </target>
 
     <target name="build" depends="init" description="Compile">
+        <echo message="Compiling"/>
         <javac debug="true" debuglevel="${debug.level}" destdir="${out.dir}" includeantruntime="false">
             <src path="${src.dir}"/>
-            <src path="${test.dir}"/>
-            <classpath>
-                <path refid="classpath"/>
-            </classpath>
+            <classpath refid="classpath"/>
             <compilerarg value="-Xlint:all"/>
         </javac>
     </target>
 
-    <target name="junit" depends="build" description="Run JUnit tests with coverage">
-        <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpath="${lib.dir}/jacocoant.jar"/>
+    <target name="build.tests" depends="build" description="Compile test files.">
+        <echo message="Compiling tests."/>
+        <javac debug="true" debuglevel="${debug.level}" destdir="${test.out.dir}" includeantruntime="false">
+            <src path="${test.dir}"/>
+            <classpath refid="test.cp"/>
+            <compilerarg value="-Xlint:all"/>
+        </javac>
+    </target>
+
+    <target name="junit" depends="build.tests" description="Run JUnit tests with coverage">
         <jacoco:coverage destfile="${out.dir}/jacoco.exec" xmlns:jacoco="antlib:org.jacoco.ant">
             <junit fork="true" printsummary="withOutAndErr" haltonfailure="no" failureproperty="test.failed">
                 <classpath>
-                    <path refid="classpath"/>
+                    <path refid="test.cp"/>
                 </classpath>
                 <batchtest todir="${test.out.dir}">
                     <formatter type="plain" usefile="false"/>
-                    <fileset dir="test">
+                    <fileset dir="${test.dir}">
                         <include name="**/*.java"/>
                     </fileset>
                 </batchtest>
@@ -78,14 +98,13 @@
     </target>
 
     <target name="jacoco" depends="junit" description="Generate Java code coverage report in XML-format">
-        <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpath="${lib.dir}/jacocoant.jar"/>
         <jacoco:report>
             <executiondata>
                 <file file="${out.dir}/jacoco.exec"/>
             </executiondata>
             <structure name="${ant.project.name}">
                 <classfiles>
-                    <fileset dir="${out.dir}"/>
+                    <path refid="test.cp"/>
                 </classfiles>
                 <sourcefiles encoding="UTF-8">
                     <fileset dir="${src.dir}"/>
@@ -94,5 +113,4 @@
             <xml destfile="${report.dir}/report.xml"/>
         </jacoco:report>
     </target>
-
 </project>

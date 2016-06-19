@@ -10,7 +10,6 @@ jdk:
   - openjdk7
 
 script:
-  - ant junit
   - ant checkstyle
   - ant jacoco
 
