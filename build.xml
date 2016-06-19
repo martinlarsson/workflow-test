@@ -5,15 +5,16 @@
     <property name="test.dir" value="test"/>
     <property name="src.dir" value="src"/>
     <property name="out.dir" value="out"/>
+    <property name="app.out.dir" value="${out.dir}/app"/>
     <property name="test.out.dir" value="${out.dir}/test"/>
     <property name="lib.dir" value="lib"/>
     <property name="report.dir" value="${out.dir}/report"/>
     <property name="debug.level" value="source,lines,vars"/>
     <path id="classpath">
-        <pathelement location="${out.dir}"/>
+        <pathelement location="${app.out.dir}"/>
     </path>
     <path id="test.cp">
-        <pathelement location="${out.dir}"/>
+        <pathelement location="${app.out.dir}"/>
         <pathelement location="${test.out.dir}"/>
         <fileset dir="${lib.dir}">
             <include name="junit-*.jar"/>
@@ -21,21 +22,15 @@
         </fileset>
     </path>
     <path id="jacoco.cp">
-        <pathelement location="${out.dir}"/>
+        <pathelement location="${app.out.dir}"/>
         <fileset dir="${lib.dir}">
             <include name="jacocoant.jar"/>
         </fileset>
     </path>
     <path id="checkstyle.cp">
-        <pathelement location="${out.dir}"/>
+        <pathelement location="${app.out.dir}"/>
         <fileset dir="${lib.dir}">
             <include name="checkstyle-*.jar"/>
-        </fileset>
-    </path>
-    <path id="report.cp">
-        <fileset dir="${out.dir}">
-            <exclude name="report"/>
-            <exclude name="test"/>
         </fileset>
     </path>
 
@@ -50,6 +45,7 @@
     <!-- Targets -->
     <target name="init" description="Create directories">
         <echo message="Creating dirs."/>
+        <mkdir dir="${app.out.dir}"/>
         <mkdir dir="${out.dir}"/>
         <mkdir dir="${test.out.dir}"/>
         <mkdir dir="${report.dir}"/>
@@ -58,12 +54,11 @@
     <target name="clean" description="Clean up">
         <echo message="Deleting dirs."/>
         <delete dir="${out.dir}"/>
-        <delete dir="${report.dir}"/>
     </target>
 
     <target name="build" depends="init" description="Compile">
         <echo message="Compiling"/>
-        <javac debug="true" debuglevel="${debug.level}" destdir="${out.dir}" includeantruntime="false">
+        <javac debug="true" debuglevel="${debug.level}" destdir="${app.out.dir}" includeantruntime="false">
             <src path="${src.dir}"/>
             <classpath refid="classpath"/>
             <compilerarg value="-Xlint:all"/>
@@ -103,17 +98,17 @@
         </checkstyle>
     </target>
 
-    <target name="jacoco" depends="junit" description="Generate Java code coverage report in XML-format">
+    <target name="report" depends="junit" description="Generate Java code coverage report in XML-format">
         <jacoco:report>
             <executiondata>
                 <file file="${out.dir}/jacoco.exec"/>
             </executiondata>
             <structure name="${ant.project.name}">
                 <classfiles>
-                    <path refid="report.cp"/>
+                    <path refid="classpath"/>
                 </classfiles>
                 <sourcefiles encoding="UTF-8">
-                    <fileset dir="${src.dir}"/>
+                    <fileset dir="${src.dir}" includes="**/*.java"/>
                 </sourcefiles>
             </structure>
             <xml destfile="${report.dir}/report.xml"/>
