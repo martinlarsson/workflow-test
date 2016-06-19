@@ -32,6 +32,12 @@
             <include name="checkstyle-*.jar"/>
         </fileset>
     </path>
+    <path id="report.cp">
+        <fileset dir="${out.dir}">
+            <exclude name="report"/>
+            <exclude name="test"/>
+        </fileset>
+    </path>
 
     <!-- Taskdefs -->
     <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
@@ -82,7 +88,7 @@
                 <batchtest todir="${test.out.dir}">
                     <formatter type="plain" usefile="false"/>
                     <fileset dir="${test.dir}">
-                        <include name="**/*.java"/>
+                        <include name="*.java"/>
                     </fileset>
                 </batchtest>
             </junit>
@@ -104,7 +110,7 @@
             </executiondata>
             <structure name="${ant.project.name}">
                 <classfiles>
-                    <path refid="test.cp"/>
+                    <path refid="report.cp"/>
                 </classfiles>
                 <sourcefiles encoding="UTF-8">
                     <fileset dir="${src.dir}"/>
