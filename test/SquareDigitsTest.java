@@ -27,7 +27,7 @@ public class SquareDigitsTest {
 
     @Test
     public void testsSquareZero() throws Exception {
-        int expected = 0;
+        int expected = 1;
         int actual = sd.square(0);
         assertEquals("Testing digit square of 0", expected, actual);
     }
